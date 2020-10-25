@@ -42,8 +42,8 @@ class Node:
         if self.right is not None and self.right.min is not None and self.right.min <= data:
             return "1" + self.right.encode(data)
 
-    def make_tree(self, dict):
-        pass
+    def half_kraft_rebuild(self, dict):
+        NotImplemented
 
 class LeafNodeChildrenError(Exception):
     def __init__(self, data):
