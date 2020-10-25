@@ -1,0 +1,18 @@
+import node
+
+a = node.LeafNode(1)
+b = node.LeafNode(2)
+c = node.LeafNode(5)
+d = node.LeafNode(7)
+e = node.Node()
+e.insert_left(a)
+e.insert_right(b)
+f = node.Node()
+f.insert_left(e)
+f.insert_right(c)
+g = node.Node()
+g.insert_left(f)
+h = node.Node()
+h.insert_left(g)
+h.insert_right(d)
+h.in_order_traversal()
