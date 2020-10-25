@@ -42,7 +42,7 @@ class Node:
         if self.right is not None and self.right.min is not None and self.right.min <= data:
             return "1" + self.right.encode(data)
 
-    def made_tree(self, dict):
+    def make_tree(self, dict):
         pass
 
 class LeafNodeChildrenError(Exception):
