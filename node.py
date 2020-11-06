@@ -1,3 +1,5 @@
+import collections
+
 class Node:
     def __init__(self, left=None, right=None):
         self.left, self.right, self.max, self.min = left, right, None, None
@@ -44,6 +46,7 @@ class Node:
 
     def half_kraft_rebuild(self, dict):
         NotImplemented
+
 
 class LeafNodeChildrenError(Exception):
     def __init__(self, data):

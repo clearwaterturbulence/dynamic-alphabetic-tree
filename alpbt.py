@@ -43,4 +43,11 @@ class AlphabeticTree:
                 ret += key
         return ret
 
-
+    # returns an ordered dictionary of encodings based on depths
+    @staticmethod
+    def half_kraft_encode(dict):
+        sorted_dict = collections.OrderedDict(sorted(dict))
+        ret = dict()
+        first_key, first_val = sorted_dict.popitem(False)
+        ret[first_key] = [True] * first_val
+        remaining_list = list(sorted_dict.items())
