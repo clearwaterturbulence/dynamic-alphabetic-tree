@@ -1,18 +1,24 @@
 import node
 import collections
 import math
+from enum import Enum
+
+class DepthAlgo(Enum):
+    ORIG = 1
+    AVR_ORIG = 2
 
 class AlphabeticTree:
-    def __init__(self, size = 1024):
+    def __init__(self, size = 1024, algo = DepthAlgo.ORIG):
         self.count = collections.Counter({k:1 for k in list(range(1, size+1))})
-        self.depth = AlphabeticTree.find_all_required_depth(self.count)
+        self.algo = algo
+        self.depth = AlphabeticTree.find_all_required_depth(self.count, self.algo)
         self.root = node.Node.rebuild(AlphabeticTree.half_kraft(self.depth))
         self.size = size
 
     def access(self, data):
         if (data < self.size + 1 and data > 0):
             self.count[data] += 1
-            max_depth = AlphabeticTree.find_required_depth(self.count, data)
+            max_depth = AlphabeticTree.find_required_depth(self.count, data, self.algo)
             if (max_depth < self.depth[data]):
                 self.move_up(data, self.depth[data] - max_depth)
 
@@ -20,7 +26,7 @@ class AlphabeticTree:
         # first, check if the node can be relocated by reducing solitary edges
         node_in_question = self.root.find_node(data)
         reduced_amount = 0
-        all_required_depth = AlphabeticTree.find_all_required_depth(self.count)
+        all_required_depth = AlphabeticTree.find_all_required_depth(self.count, self.algo)
         if (node_in_question.has_parent()):
             reduced_amount = node_in_question.reduce_edge_length_by(depth_decrease)
             self.depth[data] = self.depth[data] - reduced_amount
@@ -40,13 +46,22 @@ class AlphabeticTree:
                 self.depth[data] = value + new_sub_tree.find_depth()
 
     @staticmethod
-    def find_required_depth(count, data):
-        return math.ceil(math.log2(sum(count.values())/count[data]))+1
+    def find_required_depth(count, data, algo):
+        s = sum(count.values())
+        l = len(count)
+        if algo is DepthAlgo.ORIG:
+            return math.ceil(math.log2(s/count[data]))+1
+        if algo is DepthAlgo.AVR_ORIG:
+            return math.ceil(math.log2(2*s*l/(count[data]*l+s)))+1
 
     @staticmethod
-    def find_all_required_depth(count):
-        num = math.log2(sum(count.values()))
-        return {d : math.ceil(num/count[d])+1 for d in count.keys()}
+    def find_all_required_depth(count, algo):
+        s = sum(count.values())
+        l = len(count)
+        if algo is DepthAlgo.ORIG:
+            return {d : math.ceil(math.log2(s/count[d]))+1 for d in count.keys()}
+        if algo is DepthAlgo.AVR_ORIG:
+            return {d : math.ceil(math.log2(2*s*l/(count[d]*l+s)))+1 for d in count.keys()}
 
     @staticmethod
     def half_kraft(depth):
