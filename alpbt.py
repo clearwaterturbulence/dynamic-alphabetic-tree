@@ -32,7 +32,7 @@ class AlphabeticTree:
                     
             rebuild_depth = {data : depth - rebuild_root.find_depth() for data, depth in all_required_depth.items() if data in range(rebuild_root.min, rebuild_root.max+1)}
             new_sub_tree = node.Node.rebuild(AlphabeticTree.half_kraft(rebuild_depth))
-            if rebuild_root.has_parent is not True:
+            if rebuild_root.has_parent() is not True:
                 self.root = new_sub_tree
             else:
                 rebuild_root.replace(new_sub_tree)
