@@ -1,9 +1,13 @@
 import collections
+import binarytree
 
 class Node:
     def __init__(self, left=None, left_length=0, right=None, right_length=0, parent=None):
         self.left, self.right, self.max, self.min, self.parent = left, right, None, None, parent
         self.left_length, self.right_length = left_length, right_length
+
+    def __str__(self):
+        return self.convert_binarytree().__str__()
 
     def are_leaves_leafnodes(self):
         return (self.left is None or self.left.are_leaves_leafnodes()) and \
@@ -86,7 +90,7 @@ class Node:
     
     def replace(self, node):
         if self.has_parent():
-            self.parent.left.insert(node, self.parent.left is self)
+            self.parent.insert(node, self.parent.left is self)
 
     def reduce_edge_length_by(self, reduction):
         ret = 0
@@ -110,6 +114,13 @@ class Node:
         else:
             print("no parent found")
 
+    def convert_binarytree(self):
+        this = binarytree.Node(0)
+        if self.left is not None:
+            this.left = self.left.convert_binarytree()
+        if self.right is not None:
+            this.right = self.right.convert_binarytree()
+        return this
 
     @staticmethod
     def rebuild(location):
@@ -154,3 +165,6 @@ class LeafNode(Node):
         else:
             print("node not found")
             return None
+
+    def convert_binarytree(self):
+        return binarytree.Node(self.data)
