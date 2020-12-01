@@ -7,7 +7,7 @@ class Node:
         self.left_length, self.right_length = left_length, right_length
 
     def __str__(self):
-        return self.convert_binarytree().__str__()
+        return str(self.convert_binarytree())
 
     def are_leaves_leafnodes(self):
         return (self.left is None or self.left.are_leaves_leafnodes()) and \
@@ -109,7 +109,7 @@ class Node:
         return cur
 
     def find_parent(self):
-        if self.parent is not None:
+        if self.has_parent():
             return self.parent
         else:
             print("no parent found")
@@ -121,6 +121,16 @@ class Node:
         if self.right is not None:
             this.right = self.right.convert_binarytree()
         return this
+
+    def is_single_child(self):
+        if self.has_parent():
+            return (self.parent.left is None) or (self.parent.right is None)
+
+    def find_length_of_lonesome_ancestor(self):
+        if self.has_parent() and self.is_single_child():
+            return 1+ self.parent.find_length_of_lonesome_ancestor()
+        else:
+            return 0
 
     @staticmethod
     def rebuild(location):
